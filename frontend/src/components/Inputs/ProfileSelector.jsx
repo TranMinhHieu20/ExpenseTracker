@@ -18,7 +18,8 @@ const ProfileSelector = ({ image, setImage }) => {
     }
   }
 
-  const handleRemoveImage = () => {
+  const handleRemoveImage = (e) => {
+    e.stopPropagation() // <--- QUAN TRỌNG: Chặn không cho nó mở lại bảng chọn file
     setImage(null)
     setPreviewUrl(null)
     inpRef.current.value = null
@@ -30,11 +31,15 @@ const ProfileSelector = ({ image, setImage }) => {
   return (
     <div className="flex justify-center mb-6">
       <input type="file" accept="image/*" ref={inpRef} onChange={handleProfilePicChange} className="hidden" />
-      <button className="size-22 rounded-full overflow-hidden relative group cursor-pointer" onClick={onChooseFile}>
+      <button
+        type="button"
+        className="size-22 rounded-full overflow-hidden relative group cursor-pointer"
+        onClick={onChooseFile}
+      >
         <img src={previewUrl || avatar} alt="avatar" className="size-full object-cover bg-gray-300 text-center" />
         <div className="absolute bottom-0 right-0 inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
           {image ? (
-            <MdDelete className="text-white" size={30} onClick={handleRemoveImage} />
+            <MdDelete className="text-white" size={30} onClick={(e) => handleRemoveImage(e)} />
           ) : (
             <FaFileUpload className="text-white" size={30} />
           )}

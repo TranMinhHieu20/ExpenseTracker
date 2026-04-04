@@ -14,9 +14,10 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const acceptToken = localStorage.getItem('token')
-    if (acceptToken) {
-      config.headers.Authorization = `Bearer ${acceptToken}`
+    const accessToken = localStorage.getItem('token')
+    console.log('Token gửi đi nè sếp:', accessToken) // Thêm dòng này
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`
     }
     return config
   },
@@ -36,7 +37,6 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       if (error.response.status === 401) {
         // Unauthorized, token might be invalid or expired
-
         window.location.href = '/login'
       } else if (error.response.status === 500) {
         console.error('Server Error.Please try again later.')

@@ -12,6 +12,7 @@ export const uploadImage = async (imageFile) => {
         'Content-Type': 'multipart/form-data'
       }
     })
+    console.log('Image upload response: ', res)
     return res.data
   } catch (error) {
     console.log('Error uploading the image: ', error)

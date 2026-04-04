@@ -47,7 +47,7 @@ const SignUp = () => {
       // upload profile picture if selected
       if (profilePic) {
         const imgUploadRes = await uploadImage(profilePic)
-        profileImageUrl = imgUploadRes.imageUrl || ''
+        profileImageUrl = imgUploadRes || ''
       }
       const res = await axiosInstance.post(API_PATHS.AUTH.SIGNUP, {
         fullname,

@@ -3,10 +3,11 @@ export const API_PATHS = {
   AUTH: {
     LOGIN: `${BASE_URL}/auth/login`,
     SIGNUP: `${BASE_URL}/auth/register`,
-    LOGOUT: `${BASE_URL}/auth/logout`
+    LOGOUT: `${BASE_URL}/auth/logout`,
+    GET_USER: `${BASE_URL}/auth/getUser`
   },
   DASHBOARD: {
-    GET_DATA: `${BASE_URL}/dashboard/getDashboardData`
+    GET_DATA: `${BASE_URL}/dashboard`
   },
   INCOME: {
     ADD_INCOME: `${BASE_URL}/income/add`,

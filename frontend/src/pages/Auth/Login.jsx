@@ -37,6 +37,7 @@ const Login = () => {
       })
 
       const { token, user } = res.data
+      console.log('Login response: ', user)
 
       if (token) {
         localStorage.setItem('token', token)
