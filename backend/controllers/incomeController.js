@@ -4,9 +4,9 @@ const Income = require('../models/Income.js')
 const addIncome = async (req, res) => {
   try {
     const userId = req.user._id
-    const { icon, source, amount, data } = req.body
+    const { icon, source, amount, date } = req.body
     //validate
-    if (!source || !amount || !data) {
+    if (!source || !amount || !date) {
       return res.status(400).json({ message: 'Please fill in all required fields' })
     }
 
@@ -15,7 +15,7 @@ const addIncome = async (req, res) => {
       icon,
       source,
       amount,
-      data: new Date(data)
+      date: new Date(date)
     })
 
     await newIncome.save()

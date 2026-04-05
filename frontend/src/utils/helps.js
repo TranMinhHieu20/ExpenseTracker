@@ -9,3 +9,11 @@ export const addThousandSeparator = (number) => {
   const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   return fractionPart ? `${formattedIntegerPart}.${fractionPart}` : formattedIntegerPart
 }
+
+export const prepareExpenseBarChartData = (data = []) => {
+  const chartData = data.map((item) => ({
+    category: item?.category,
+    amount: item?.amount
+  }))
+  return chartData
+}

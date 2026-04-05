@@ -12,7 +12,7 @@ router.use(protectAuth)
 
 router.post('/add', addExpense)
 router.get('get', getAllExpense)
-router.get('/downloadexcel', deleteExpense)
-router.delete('/:id', downloadExpenseExcel)
+router.get('/downloadexcel', downloadExpenseExcel)
+router.delete('/:id', deleteExpense)
 
 module.exports = router
