@@ -1,7 +1,12 @@
 import React from 'react'
+import DashboardLayout from '../../components/layouts/DashboardLayout'
 
 const Expense = () => {
-  return <div>Expense</div>
+  return (
+    <DashboardLayout activeMenu="Expense">
+      <div className="w-full my-5 mx-auto"></div>
+    </DashboardLayout>
+  )
 }
 
 export default Expense
