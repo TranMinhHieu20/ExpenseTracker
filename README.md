@@ -1,6 +1,6 @@
 # 💰 Expense Tracker - Ứng dụng Quản lý Thu chi Cá nhân
 
-![Main Dashboard](link_anh_screenshot_cua_ban_neu_co)
+![alt text](image-1.png)
 
 **Expense Tracker** là một ứng dụng Fullstack (MERN) giúp người dùng theo dõi thu nhập, chi tiêu hàng ngày một cách trực quan thông qua biểu đồ và báo cáo chi tiết.
 
@@ -71,6 +71,3 @@ npm run dev
 ```
 
 Chúc bạn may mắn!
-
-Dashboard
-![alt text](image.png)
