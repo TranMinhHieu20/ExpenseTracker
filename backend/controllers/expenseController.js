@@ -36,7 +36,7 @@ const getAllExpense = async (req, res) => {
 const deleteExpense = async (req, res) => {
   try {
     const userId = req.user._id
-    await Expense.findByIdAndDelete(userId)
+    await Expense.findByIdAndDelete(req.params.id, { userId })
     res.status(200).json({ message: 'Expense deleted successfully' })
   } catch (error) {
     console.log('Error Delete Expense In ExpenseController', error)
@@ -57,9 +57,9 @@ const downloadExpenseExcel = async (req, res) => {
     const wb = xlsx.utils.book_new()
     const ws = xlsx.utils.json_to_sheet(data)
     xlsx.utils.book_append_sheet(wb, ws, 'Income')
-    xlsx.writeFile(wb, 'income_details.xlsx')
-    res.download('income_details.xlsx')
-    res.status(200).json({ message: 'Excel file downloaded successfully' })
+    xlsx.writeFile(wb, 'expense_details.xlsx')
+    res.download('expense_details.xlsx')
+    res.status(200).json({ message: 'Excel file downloaded successfully', data })
   } catch (error) {
     console.log('Error Download Expense Excel In ExpenseController', error)
     res.status(500).json({ message: 'Server error' })

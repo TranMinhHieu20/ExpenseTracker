@@ -8,8 +8,8 @@ import Modal from '../../components/Modal'
 import { useUserAuth } from '../../hooks/useUserAuth'
 import AddIncomeForm from '../../components/Income/AddIncomeForm'
 import { toast } from 'react-toastify'
-import { data } from 'react-router-dom'
 import IncomeList from '../../components/Income/IncomeList'
+import DeleteAlert from '../../components/DeleteAlert'
 
 const Income = () => {
   useUserAuth()
@@ -32,7 +32,7 @@ const Income = () => {
       if (res.data) {
         setIncomeData(res.data)
       }
-      console.log('getincome:', res.data)
+      console.log('getIncome:', res.data)
     } catch (error) {
       console.log('Something went wrong. Please try again!', error)
     } finally {
@@ -73,10 +73,44 @@ const Income = () => {
   }
 
   // handle delete income
-  const handleDeleteIncome = async () => {}
+  const handleDeleteIncome = async (id) => {
+    try {
+      const res = await axiosInstance.delete(API_PATHS.INCOME.DELETE_INCOME(id))
+      if (res.data) {
+        setOpenDeleteAlert({ show: false, data: null })
+        toast.success('Income deleted successfully!')
+        fetchIncomeDetails() // Load lại danh sách mới
+      }
+    } catch (error) {
+      console.log('Something went wrong. Please try again!', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   // handle download excel
-  const handleDownloadIncomeDetails = async () => {}
+  const handleDownloadIncomeDetails = async () => {
+    setLoading(true) // Nên bật loading ở đầu
+    try {
+      const res = await axiosInstance.get(API_PATHS.INCOME.DOWNLOAD_INCOME, {
+        responseType: 'blob'
+      })
+
+      const url = window.URL.createObjectURL(new Blob([res.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', 'income_details.xlsx')
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.log('Something went wrong. Please try again!', error)
+      toast.error('Failed to download income details. Please try again!')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     fetchIncomeDetails()
@@ -98,12 +132,28 @@ const Income = () => {
           </div>
           <IncomeList
             transactions={incomeData}
-            onDelete={(id) => openDeleteAlert({ show: true, data: id })}
+            onDelete={(id) => {
+              setOpenDeleteAlert({ show: true, data: id })
+            }}
             onDownload={handleDownloadIncomeDetails}
           />
         </div>
         <Modal isOpen={openAddIncomeModal} onClose={() => setOpenAddIncomeModal(false)} title="Add Income">
           <AddIncomeForm onAddIncome={handleAddIncome} />
+        </Modal>
+        <Modal
+          isOpen={openDeleteAlert.show}
+          onClose={() => {
+            setOpenDeleteAlert({ show: false, date: null })
+          }}
+          title="Delete Income"
+        >
+          <DeleteAlert
+            content="Are you sure you want to delete this income details?"
+            onDelete={() => {
+              handleDeleteIncome(openDeleteAlert.data)
+            }}
+          />
         </Modal>
       </div>
     </DashboardLayout>

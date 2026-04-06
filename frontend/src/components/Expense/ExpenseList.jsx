@@ -1,9 +1,9 @@
 import React from 'react'
-import { LuDownload } from 'react-icons/lu'
 import TransactionInfoCard from '../Cards/TransactionInfoCard'
 import moment from 'moment'
+import { LuDownload } from 'react-icons/lu'
 
-const IncomeList = ({ transactions, onDelete, onDownload }) => {
+const ExpenseList = ({ transactions, onDelete, onDownload }) => {
   return (
     <div className="card">
       <div className="flex items-center justify-between">
@@ -13,15 +13,15 @@ const IncomeList = ({ transactions, onDelete, onDownload }) => {
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-        {transactions.map((income) => (
+        {transactions.map((expense) => (
           <TransactionInfoCard
-            key={income._id}
-            title={income.source}
-            icon={income.icon}
-            date={moment(income.date).format('DO MMM YYYY')}
-            amount={income.amount}
-            type={'income'}
-            onDelete={() => onDelete(income._id)}
+            key={expense._id}
+            title={expense.category}
+            icon={expense.icon}
+            date={moment(expense.date).format('DO MMM YYYY')}
+            amount={expense.amount}
+            type={'expense'}
+            onDelete={() => onDelete(expense._id)}
           />
         ))}
       </div>
@@ -29,4 +29,4 @@ const IncomeList = ({ transactions, onDelete, onDownload }) => {
   )
 }
 
-export default IncomeList
+export default ExpenseList

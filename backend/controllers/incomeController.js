@@ -69,7 +69,7 @@ const downloadIncomeExcel = async (req, res) => {
     xlsx.utils.book_append_sheet(wb, ws, 'Income')
     xlsx.writeFile(wb, 'income_details.xlsx')
     res.download('income_details.xlsx')
-    res.status(200).json({ message: 'Excel file downloaded successfully' })
+    res.status(200).json({ message: 'Excel file downloaded successfully', data })
   } catch (error) {
     console.error('Error downloading income Excel:', error)
     res.status(500).json({ message: 'Server error' })

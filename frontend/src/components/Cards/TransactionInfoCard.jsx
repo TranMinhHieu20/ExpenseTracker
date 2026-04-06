@@ -1,7 +1,7 @@
 import React from 'react'
 import { LuUtensils, LuTrendingUp, LuTrendingDown, LuTrash2 } from 'react-icons/lu'
 
-const TransactionInfoCard = ({ title, icon, date, amount, type, hideDeleteBtn }) => {
+const TransactionInfoCard = ({ title, icon, date, amount, type, hideDeleteBtn, onDelete }) => {
   const getAmountStyles = () => (type === 'income' ? 'bg-green-50 text-green-500' : 'bg-red-50 text-red-500')
 
   return (
@@ -18,9 +18,9 @@ const TransactionInfoCard = ({ title, icon, date, amount, type, hideDeleteBtn })
           {!hideDeleteBtn && (
             <button
               className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-              onCLick={onDelete}
+              onClick={onDelete}
             >
-              <LuTrash2 size={18} />
+              <LuTrash2 size={20} />
             </button>
           )}
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-md ${getAmountStyles()}`}>

@@ -11,7 +11,7 @@ const router = express.Router()
 router.use(protectAuth)
 
 router.post('/add', addExpense)
-router.get('get', getAllExpense)
+router.get('/getExpenses', getAllExpense)
 router.get('/downloadexcel', downloadExpenseExcel)
 router.delete('/:id', deleteExpense)
 

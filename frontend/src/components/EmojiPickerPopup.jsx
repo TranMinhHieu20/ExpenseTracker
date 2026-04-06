@@ -15,7 +15,7 @@ const EmojiPickerPopup = ({ icon, onSelect }) => {
         <div className="w-12 h-12 flex items-center justify-center text-2xl bg-purple-50 text-primary rounded-lg">
           {icon ? <img src={icon} alt="Icon" className="" /> : <LuImage />}
         </div>
-        <p className="">{icon ? 'Change Icon' : 'Pick Icon'}</p>
+        <p className="dark:text-white">{icon ? 'Change Icon' : 'Pick Icon'}</p>
       </div>
       {isOpen && (
         <div className="relative">
