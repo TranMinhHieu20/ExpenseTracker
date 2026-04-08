@@ -1,0 +1,13 @@
+{
+  "name": "expensetracker",
+  "version": "1.0.0",
+  "description": "![alt text](image-1.png)",
+  "main": "server.js",
+  "scripts": {
+    "build": "npm i --prefix backend && npm i -prefix frontend && np run build -- prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

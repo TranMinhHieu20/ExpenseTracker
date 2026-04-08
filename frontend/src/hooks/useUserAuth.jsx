@@ -27,7 +27,6 @@ export const useUserAuth = () => {
       try {
         const res = await axiosInstance.get(API_PATHS.AUTH.GET_USER)
         if (isMounted && res.data) {
-          console.log('userAuth', res.data)
           updateUser(res.data.user)
         }
       } catch (error) {

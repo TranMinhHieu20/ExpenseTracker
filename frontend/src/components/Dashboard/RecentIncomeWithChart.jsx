@@ -10,7 +10,7 @@ const RecentIncomeWithChart = ({ data, totalIncome }) => {
   const [chartData, setChartData] = useState([])
   const prepareChartData = () => {
     const dataArr = data?.map((item) => ({ name: item?.source, amount: item?.amount }))
-    console.log('dataArr:', dataArr)
+
     setChartData(dataArr)
   }
 

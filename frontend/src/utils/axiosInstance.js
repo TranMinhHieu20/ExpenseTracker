@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('token')
-    console.log('Token gửi đi nè sếp:', accessToken) // Thêm dòng này
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`
     }
