@@ -1,7 +1,4 @@
-export const BASE_URL =
-  import.meta.env.MODE === 'development'
-    ? 'http://localhost:3000/api/v1'
-    : 'https://expensetracker-4hy2.onrender.com/api/v1'
+export const BASE_URL = import.meta.env.MODE === 'development' ? 'http://localhost:3000/api/v1' : '/api/v1'
 export const API_PATHS = {
   AUTH: {
     LOGIN: `${BASE_URL}/auth/login`,
