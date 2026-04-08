@@ -33,6 +33,14 @@ app.use('/api/v1/income', incomeRoutes)
 app.use('/api/v1/expense', expenseRoutes)
 app.use('/api/v1/dashboard', dashboardRoutes)
 
+// make ready for deployment
+if (process.env.NODE_ENV == 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/dist')))
+  app.use('*', (_, res) => {
+    res.sendFile(path.join(__dirname, '../frontend', 'dist', 'index.html'))
+  })
+}
+
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`)
   connectDB()
