@@ -9,9 +9,7 @@ const expenseRoutes = require('./routes/expenseRoutes.js')
 const dashboardRoutes = require('./routes/dashboardRoutes.js')
 const cookieParser = require('cookie-parser')
 
-connectDB()
-
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000
 const app = express()
 
 app.use(
@@ -36,7 +34,7 @@ app.use('/api/v1/dashboard', dashboardRoutes)
 // make ready for deployment
 if (process.env.NODE_ENV == 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/dist')))
-  app.use('*', (_, res) => {
+  app.get('*', (_, res) => {
     res.sendFile(path.join(__dirname, '../frontend', 'dist', 'index.html'))
   })
 }
