@@ -54,7 +54,7 @@ npm install
 Tạo file .env trong folder backend
 
 PORT = 3000
-MONGO_URI = mongodb+srv://tranhieu200304_db_user:gVDTwaTPbZqrd27v@cluster0.5hsdlyg.mongodb.net/?appName=expense-tracker(có thể tự tạo database, copy dán vào đây, nhớ bật quyền ip truy cập là tất cả 0.0.0.0)
+MONGO_URI = mongodb+srv://tranhieu200304_db_user:gVDTwaTPbZqrd27v@cluster0.5hsdlyg.mongodb.net/?appName=expense-tracker(có thể tự tạo database, copy dán vào đây, nếu tạo database mới mongo nhớ bật quyền ip truy cập là tất cả 0.0.0.0)
 JWT_SECRET = tùy ý của bạn
 CLIENT_URL = http://localhost:5173(trùng với localhost frontend)
 
@@ -68,6 +68,11 @@ npm run dev
 cd frontend
 npm install
 npm run dev
+
+
+
+Đây là project đã deploy, đợi vài phút để server chạy
+https://expensetracker-4hy2.onrender.com/
 ```
 
 Chúc bạn may mắn!
