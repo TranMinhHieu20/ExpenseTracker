@@ -2,12 +2,13 @@ import React from 'react'
 import Input from '../Inputs/Input'
 import EmojiPicker from 'emoji-picker-react'
 import EmojiPickerPopup from '../EmojiPickerPopup'
-const AddExpenseForm = ({ onAddExpense }) => {
+import moment from 'moment'
+const AddExpenseForm = ({ onAddExpense, editData }) => {
   const [expense, setExpense] = React.useState({
-    category: '',
-    icon: '',
-    date: '',
-    amount: ''
+    category: editData?.category || '',
+    icon: editData?.icon || '',
+    date: editData?.date ? moment(editData.date).format('YYYY-MM-DD') : '',
+    amount: editData?.amount || ''
   })
 
   const handleChange = (key, value) => setExpense({ ...expense, [key]: value })
@@ -54,7 +55,7 @@ const AddExpenseForm = ({ onAddExpense }) => {
             onAddExpense(expense)
           }}
         >
-          Add Expense
+          {editData ? 'Update Expense' : 'Add Expense'}
         </button>
       </div>
     </div>

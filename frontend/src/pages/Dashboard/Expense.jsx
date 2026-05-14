@@ -20,6 +20,7 @@ const Expense = () => {
     data: null
   })
   const [openAddExpenseModal, setOpenAddExpenseModal] = useState(false)
+  const [editExpenseData, setEditExpenseData] = useState(null)
 
   // get all expense
   const fetchExpenseDetails = async () => {
@@ -40,9 +41,9 @@ const Expense = () => {
     }
   }
 
-  // handle add Expense
-  const handleAddExpense = async (income) => {
-    const { category, icon, amount, date } = income
+  // handle add or edit Expense
+  const handleAddExpense = async (incomeData) => {
+    const { category, icon, amount, date } = incomeData
     // validate check
     if (!category.trim()) {
       toast.error('category is required.')
@@ -59,11 +60,23 @@ const Expense = () => {
     if (loading) return
 
     try {
-      const res = await axiosInstance.post(API_PATHS.EXPENSE.ADD_EXPENSE, { category, icon, amount, date })
+      let res
+      if (editExpenseData) {
+        res = await axiosInstance.put(API_PATHS.EXPENSE.UPDATE_EXPENSE(editExpenseData._id), {
+          category,
+          icon,
+          amount,
+          date
+        })
+      } else {
+        res = await axiosInstance.post(API_PATHS.EXPENSE.ADD_EXPENSE, { category, icon, amount, date })
+      }
+
       if (res.data) {
         setOpenAddExpenseModal(false)
-        toast.success('Expense added successfully!')
-        fetchExpenseDetails() // Load lại danh sách mới
+        setEditExpenseData(null)
+        toast.success(editExpenseData ? 'Expense updated successfully!' : 'Expense added successfully!')
+        fetchExpenseDetails()
       }
     } catch (error) {
       console.log('Something went wrong. Please try again!', error)
@@ -78,7 +91,7 @@ const Expense = () => {
       if (res.data) {
         toast.success('Expense deleted successfully!')
         setOpenDeleteAlert({ show: false, data: null })
-        fetchExpenseDetails() // Load lại danh sách mới
+        fetchExpenseDetails()
       }
     } catch (error) {
       console.log('Something went wrong. Please try again!', error)
@@ -87,9 +100,13 @@ const Expense = () => {
     }
   }
 
+  const handleEditExpense = (data) => {
+    setEditExpenseData(data)
+    setOpenAddExpenseModal(true)
+  }
   // download
   const handleDownloadExpenseDetails = async () => {
-    setLoading(true) // Nên bật loading ở đầu
+    setLoading(true)
     try {
       const res = await axiosInstance.get(API_PATHS.EXPENSE.DOWNLOAD_EXPENSE, {
         responseType: 'blob'
@@ -124,6 +141,7 @@ const Expense = () => {
             <ExpenseOverview
               transactions={expenseData}
               onExpenseIncome={() => {
+                setEditExpenseData(null)
                 setOpenAddExpenseModal(true)
               }}
             />
@@ -134,16 +152,18 @@ const Expense = () => {
               setOpenDeleteAlert({ show: true, data: id })
             }}
             onDownload={handleDownloadExpenseDetails}
+            onEdit={handleEditExpense}
           />
         </div>
         <Modal
           isOpen={openAddExpenseModal}
           onClose={() => {
             setOpenAddExpenseModal(false)
+            setEditExpenseData(null)
           }}
-          title="Add Expense"
+          title={editExpenseData ? 'Edit Expense' : 'Add Expense'}
         >
-          <AddExpenseForm onAddExpense={handleAddExpense} />
+          <AddExpenseForm onAddExpense={handleAddExpense} editData={editExpenseData} />
         </Modal>
 
         <Modal

@@ -20,6 +20,7 @@ const Income = () => {
     data: null
   })
   const [openAddIncomeModal, setOpenAddIncomeModal] = useState(false)
+  const [editIncomeData, setEditIncomeData] = useState(null)
 
   // get all income
   const fetchIncomeDetails = async () => {
@@ -40,9 +41,9 @@ const Income = () => {
     }
   }
 
-  // handle add income
-  const handleAddIncome = async (income) => {
-    const { source, icon, amount, date } = income
+  // handle add or edit income
+  const handleAddIncome = async (incomeData) => {
+    const { source, icon, amount, date } = incomeData
     // validate check
     if (!source.trim()) {
       toast.error('Source is required.')
@@ -59,11 +60,23 @@ const Income = () => {
     if (loading) return
 
     try {
-      const res = await axiosInstance.post(API_PATHS.INCOME.ADD_INCOME, { source, icon, amount, date })
+      let res
+      if (editIncomeData) {
+        res = await axiosInstance.put(API_PATHS.INCOME.UPDATE_INCOME(editIncomeData._id), {
+          source,
+          icon,
+          amount,
+          date
+        })
+      } else {
+        res = await axiosInstance.post(API_PATHS.INCOME.ADD_INCOME, { source, icon, amount, date })
+      }
+
       if (res.data) {
         setOpenAddIncomeModal(false)
-        toast.success('Income added successfully!')
-        fetchIncomeDetails() // Load lại danh sách mới
+        setEditIncomeData(null)
+        toast.success(editIncomeData ? 'Income updated successfully!' : 'Income added successfully!')
+        fetchIncomeDetails()
       }
     } catch (error) {
       console.log('Something went wrong. Please try again!', error)
@@ -79,7 +92,7 @@ const Income = () => {
       if (res.data) {
         setOpenDeleteAlert({ show: false, data: null })
         toast.success('Income deleted successfully!')
-        fetchIncomeDetails() // Load lại danh sách mới
+        fetchIncomeDetails()
       }
     } catch (error) {
       console.log('Something went wrong. Please try again!', error)
@@ -88,9 +101,14 @@ const Income = () => {
     }
   }
 
+  const handleEditIncome = (data) => {
+    setEditIncomeData(data)
+    setOpenAddIncomeModal(true)
+  }
+
   // handle download excel
   const handleDownloadIncomeDetails = async () => {
-    setLoading(true) // Nên bật loading ở đầu
+    setLoading(true)
     try {
       const res = await axiosInstance.get(API_PATHS.INCOME.DOWNLOAD_INCOME, {
         responseType: 'blob'
@@ -126,6 +144,7 @@ const Income = () => {
             <IncomeOverView
               transactions={incomeData}
               onAddIncome={() => {
+                setEditIncomeData(null)
                 setOpenAddIncomeModal(true)
               }}
             />
@@ -136,10 +155,18 @@ const Income = () => {
               setOpenDeleteAlert({ show: true, data: id })
             }}
             onDownload={handleDownloadIncomeDetails}
+            onEdit={handleEditIncome}
           />
         </div>
-        <Modal isOpen={openAddIncomeModal} onClose={() => setOpenAddIncomeModal(false)} title="Add Income">
-          <AddIncomeForm onAddIncome={handleAddIncome} />
+        <Modal
+          isOpen={openAddIncomeModal}
+          onClose={() => {
+            setOpenAddIncomeModal(false)
+            setEditIncomeData(null)
+          }}
+          title={editIncomeData ? 'Edit Income' : 'Add Income'}
+        >
+          <AddIncomeForm onAddIncome={handleAddIncome} editData={editIncomeData} />
         </Modal>
         <Modal
           isOpen={openDeleteAlert.show}

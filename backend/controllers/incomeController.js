@@ -5,7 +5,6 @@ const addIncome = async (req, res) => {
   try {
     const userId = req.user._id
     const { icon, source, amount, date } = req.body
-    //validate
     if (!source || !amount || !date) {
       return res.status(400).json({ message: 'Please fill in all required fields' })
     }
@@ -26,11 +25,9 @@ const addIncome = async (req, res) => {
   }
 }
 
-//
 const getAllIncome = async (req, res) => {
   try {
     const userId = req.user._id
-
     const income = await Income.find({ userId }).sort({ date: -1 })
     res.status(200).json(income)
   } catch (error) {
@@ -39,7 +36,6 @@ const getAllIncome = async (req, res) => {
   }
 }
 
-//
 const deleteIncome = async (req, res) => {
   try {
     const userId = req.user._id
@@ -51,17 +47,16 @@ const deleteIncome = async (req, res) => {
   }
 }
 
-//
 const downloadIncomeExcel = async (req, res) => {
   try {
     const userId = req.user._id
     const income = await Income.find({ userId }).sort({ date: -1 })
 
-    // Prepare data for excel
-    const data = income.map((item) => ({
-      Source: item.source,
-      Amount: item.amount,
-      Date: item.date
+    const data = income.map((item, index) => ({
+      'STT': index + 1,
+      'Nguồn thu': item.source,
+      'Số tiền': item.amount,
+      'Ngày tháng': new Date(item.date).toLocaleDateString('vi-VN')
     }))
 
     const wb = xlsx.utils.book_new()
@@ -69,11 +64,33 @@ const downloadIncomeExcel = async (req, res) => {
     xlsx.utils.book_append_sheet(wb, ws, 'Income')
     xlsx.writeFile(wb, 'income_details.xlsx')
     res.download('income_details.xlsx')
-    res.status(200).json({ message: 'Excel file downloaded successfully', data })
   } catch (error) {
     console.error('Error downloading income Excel:', error)
     res.status(500).json({ message: 'Server error' })
   }
 }
 
-module.exports = { addIncome, getAllIncome, deleteIncome, downloadIncomeExcel }
+const updateIncome = async (req, res) => {
+  try {
+    const userId = req.user._id
+    const { id } = req.params
+    const { icon, source, amount, date } = req.body
+
+    const updatedIncome = await Income.findOneAndUpdate(
+      { _id: id, userId },
+      { icon, source, amount, date: new Date(date) },
+      { new: true }
+    )
+
+    if (!updatedIncome) {
+      return res.status(404).json({ message: 'Income not found' })
+    }
+
+    res.status(200).json(updatedIncome)
+  } catch (error) {
+    console.error('Error updating income:', error)
+    res.status(500).json({ message: 'Server error' })
+  }
+}
+
+module.exports = { addIncome, getAllIncome, deleteIncome, downloadIncomeExcel, updateIncome }

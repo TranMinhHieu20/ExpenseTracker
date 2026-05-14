@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import Input from '../Inputs/Input'
 import EmojiPickerPopup from '../EmojiPickerPopup'
 
-const AddIncomeForm = ({ onAddIncome }) => {
+import moment from 'moment'
+
+const AddIncomeForm = ({ onAddIncome, editData }) => {
   const [income, setIncome] = useState({
-    source: '',
-    amount: '',
-    date: '',
-    icon: ''
+    source: editData?.source || '',
+    amount: editData?.amount || '',
+    date: editData?.date ? moment(editData.date).format('YYYY-MM-DD') : '',
+    icon: editData?.icon || ''
   })
 
   const handleChange = (key, value) => setIncome({ ...income, [key]: value })
@@ -54,7 +56,7 @@ const AddIncomeForm = ({ onAddIncome }) => {
             onAddIncome(income)
           }}
         >
-          Add Income
+          {editData ? 'Update Income' : 'Add Income'}
         </button>
       </div>
     </div>
