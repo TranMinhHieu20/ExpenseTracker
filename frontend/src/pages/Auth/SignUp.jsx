@@ -9,6 +9,8 @@ import axiosInstance from '../../utils/axiosInstance'
 import { MdUpdate } from 'react-icons/md'
 import { UserContext } from '../../context/UserContext'
 import { uploadImage } from '../../utils/uploadImage'
+import { GoogleLogin } from '@react-oauth/google'
+import toast from 'react-hot-toast'
 
 const SignUp = () => {
   const [fullname, setFullname] = useState()
@@ -69,6 +71,26 @@ const SignUp = () => {
       }
     }
   }
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const res = await axiosInstance.post(API_PATHS.AUTH.GOOGLE_LOGIN, {
+        credential: credentialResponse.credential
+      })
+      const { token, user } = res.data
+      if (token) {
+        localStorage.setItem('token', token)
+        updateUser(user)
+        navigate('/dashboard')
+      }
+    } catch (error) {
+      toast.error('Google Login Failed')
+    }
+  }
+
+  const handleGoogleError = () => {
+    toast.error('Google Login Failed')
+  }
   return (
     <AuthLayout>
       <div className="w-full lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 flex flex-col justify-center">
@@ -116,6 +138,21 @@ const SignUp = () => {
               </button>
             </div>
           </div>
+          
+          <div className="flex items-center justify-center mt-4">
+            <div className="border-t border-gray-300 flex-grow"></div>
+            <span className="px-3 text-gray-500 text-sm">OR</span>
+            <div className="border-t border-gray-300 flex-grow"></div>
+          </div>
+
+          <div className="mt-4 flex justify-center w-full">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              width="100%"
+            />
+          </div>
+
           <p className="text-center text-sm mt-4">
             Already have an account?{''}
             <Link to="/login" className="text-primary ml-1 underline">

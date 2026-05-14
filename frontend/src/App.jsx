@@ -4,6 +4,9 @@ import SignUp from './pages/Auth/SignUp'
 import Home from './pages/Dashboard/Home'
 import Income from './pages/Dashboard/Income'
 import Expense from './pages/Dashboard/Expense'
+import ForgotPassword from './pages/Auth/ForgotPassword'
+import ResetPassword from './pages/Auth/ResetPassword'
+import ChangePassword from './pages/Dashboard/ChangePassword'
 import UserProvider from './context/UserContext'
 import { ToastContainer } from 'react-toastify'
 
@@ -19,6 +22,9 @@ const App = () => {
             <Route path="/dashboard" exact element={<Home />} />
             <Route path="/income" exact element={<Income />} />
             <Route path="/expense" exact element={<Expense />} />
+            <Route path="/forgot-password" exact element={<ForgotPassword />} />
+            <Route path="/reset-password" exact element={<ResetPassword />} />
+            <Route path="/change-password" exact element={<ChangePassword />} />
           </Routes>
         </Router>
         <ToastContainer />
