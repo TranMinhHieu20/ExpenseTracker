@@ -2,6 +2,9 @@
 
 ![Project Banner](image-1.png)
 
+> **🚀 Dùng thử ứng dụng trực tiếp (Live Demo):** [https://expensetracker-4hy2.onrender.com](https://expensetracker-4hy2.onrender.com/login)
+> *(Lưu ý: Do sử dụng server miễn phí của Render, có thể mất từ 1-2 phút để server khởi động ở lần truy cập đầu tiên. Vui lòng kiên nhẫn!)*
+
 **Expense Tracker** là một ứng dụng quản lý tài chính cá nhân toàn diện được xây dựng trên nền tảng MERN Stack (MongoDB, Express, React, Node.js). Ứng dụng giúp người dùng theo dõi thu nhập, chi tiêu hàng ngày một cách trực quan thông qua các biểu đồ phân tích và báo cáo chi tiết, từ đó tối ưu hóa thói quen quản lý tiền bạc.
 
 ---
@@ -11,10 +14,12 @@
 - **📊 Dashboard Trực quan:** Cái nhìn tổng thể về Số dư (Balance), Tổng Thu nhập (Income) và Tổng Chi phí (Expense).
 - **📈 Biểu đồ Phân tích:** 
   - Biểu đồ tròn (Pie Chart) phân tích tỷ trọng thu nhập và chi tiêu.
-  - Biểu đồ cột (Bar Chart) theo dõi xu hướng chi tiêu theo danh mục.
+  - Biểu đồ vùng (Area Chart) theo dõi xu hướng giao dịch.
 - **📝 Quản lý Giao dịch:** Thêm, xóa và phân loại các khoản thu/chi dễ dàng với các biểu tượng (icons) sinh động.
 - **📥 Xuất Báo cáo:** Hỗ trợ xuất dữ liệu giao dịch ra file Excel (.xlsx) chuyên nghiệp.
-- **🔐 Bảo mật:** Hệ thống xác thực người dùng (Đăng ký/Đăng nhập) sử dụng **JWT (JSON Web Token)** và mã hóa mật khẩu với **Bcrypt**.
+- **🔐 Bảo mật:** Hệ thống xác thực người dùng sử dụng **JWT (JSON Web Token)** và mã hóa mật khẩu với **Bcrypt**.
+- **🌐 Đăng nhập Google (Mới):** Đăng nhập và đăng ký nhanh chóng bằng tài khoản Google (OAuth 2.0).
+- **📧 Khôi phục mật khẩu (Mới):** Yêu cầu gửi mã OTP qua Email (sử dụng Nodemailer) để đặt lại mật khẩu an toàn.
 - **📱 Responsive Design:** Giao diện hiện đại, mượt mà trên mọi thiết bị từ Desktop đến Mobile nhờ Tailwind CSS.
 
 ---
@@ -26,42 +31,19 @@
 - **Tailwind CSS:** Framework CSS tối ưu cho giao diện Responsive.
 - **Recharts:** Thư viện vẽ biểu đồ mạnh mẽ và linh hoạt.
 - **Axios:** Xử lý các yêu cầu HTTP đến Backend.
-- **React Router Dom:** Quản lý điều hướng trong ứng dụng.
-- **Moment.js:** Xử lý và định dạng thời gian.
+- **Google OAuth:** `@react-oauth/google` để tích hợp nút đăng nhập Google.
 
 ### Backend
 - **Node.js & Express:** Môi trường chạy server và framework xử lý API.
 - **MongoDB & Mongoose:** Cơ sở dữ liệu NoSQL và thư viện quản lý schema.
 - **JSON Web Token:** Cơ chế xác thực người dùng an toàn.
-- **Multer:** Xử lý upload hình ảnh (Avatar người dùng).
+- **Nodemailer:** Thư viện gửi email tự động (dùng cho việc cấp lại mật khẩu).
+- **Google Auth Library:** Xác thực ID Token từ Google gửi lên.
 - **XLSX:** Thư viện tạo và xử lý file Excel.
 
 ---
 
-## 📂 Kiến trúc dự án
-
-```text
-expense-tracker/
-├── frontend/               # Mã nguồn React (Client)
-│   ├── src/
-│   │   ├── components/     # Các thành phần UI dùng chung
-│   │   ├── pages/          # Các trang chính (Dashboard, Auth, Expense...)
-│   │   ├── hooks/          # Custom hooks (Auth, State...)
-│   │   ├── utils/          # Các hàm tiện ích (Axios instance, formatters...)
-│   │   └── assets/         # Hình ảnh, icon, font
-├── backend/                # Mã nguồn Node.js (Server)
-│   ├── config/             # Cấu hình DB (MongoDB)
-│   ├── controllers/        # Logic xử lý yêu cầu API
-│   ├── models/             # Định nghĩa Schema dữ liệu (User, Income, Expense)
-│   ├── routes/             # Định nghĩa các endpoint API
-│   ├── middleware/         # Các hàm trung gian (Auth Guard)
-│   └── uploads/            # Lưu trữ file upload cục bộ
-└── README.md
-```
-
----
-
-## ⚙️ Hướng dẫn cài đặt
+## ⚙️ Hướng dẫn cài đặt (Dành cho người mới Clone)
 
 Để chạy dự án này trên máy của bạn, hãy thực hiện các bước sau:
 
@@ -72,30 +54,48 @@ cd ExpenseTracker
 ```
 
 ### 2. Cấu hình Backend
-Di chuyển vào thư mục backend và cài đặt dependencies:
+Di chuyển vào thư mục `backend` và cài đặt thư viện:
 ```bash
 cd backend
 npm install
 ```
-Tạo file `.env` trong thư mục `backend` với các thông số sau:
+
+Tạo file `.env` trong thư mục `backend` và điền các thông số sau:
 ```env
 PORT=3000
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
+JWT_SECRET=your_secret_key_for_jwt
 CLIENT_URL=http://localhost:5173
 NODE_ENV=development
+
+# Google OAuth
+GOOGLE_CLIENT_ID=your_google_oauth_client_id_here
+
+# SMTP Config (Dành cho việc gửi email OTP)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_gmail_address@gmail.com
+SMTP_PASS=your_gmail_app_password
 ```
+*(Lưu ý: `SMTP_PASS` là Mật khẩu ứng dụng (App Password) của Gmail, không phải mật khẩu đăng nhập thông thường).*
+
 Chạy server backend:
 ```bash
 npm run dev
 ```
 
 ### 3. Cấu hình Frontend
-Di chuyển vào thư mục frontend và cài đặt dependencies:
+Mở một terminal khác, di chuyển vào thư mục `frontend` và cài đặt thư viện:
 ```bash
-cd ../frontend
+cd frontend
 npm install
 ```
+
+Tạo file `.env` trong thư mục `frontend` và cấu hình Google Client ID để nút Đăng nhập Google hoạt động:
+```env
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id_here
+```
+
 Chạy ứng dụng:
 ```bash
 npm run dev
@@ -103,20 +103,15 @@ npm run dev
 
 ---
 
-## 🔗 Danh mục API chính
+## 🔗 Danh mục API Chính
 
-- **Auth:** `POST /api/v1/auth/register`, `POST /api/v1/auth/login`
+- **Xác thực (Auth):** 
+  - `POST /api/v1/auth/register`, `POST /api/v1/auth/login`
+  - `POST /api/v1/auth/google` (Đăng nhập Google)
+  - `POST /api/v1/auth/forgot-password`, `POST /api/v1/auth/reset-password` (Khôi phục mật khẩu)
 - **Dashboard:** `GET /api/v1/dashboard` (Lấy dữ liệu tổng hợp)
-- **Income:** `GET /api/v1/income/getIncomes`, `POST /api/v1/income/add`
-- **Expense:** `GET /api/v1/expense/getExpenses`, `POST /api/v1/expense/add`
-
----
-
-## 📸 Hình ảnh minh họa
-
-| Dashboard Tổng quan | Danh sách Giao dịch |
-|:---:|:---:|
-| ![Dashboard](image.png) | ![Recent Transactions](image-1.png) |
+- **Thu nhập (Income):** `GET /api/v1/income/getIncomes`, `POST /api/v1/income/add`
+- **Chi phí (Expense):** `GET /api/v1/expense/getExpenses`, `POST /api/v1/expense/add`
 
 ---
 
@@ -125,7 +120,7 @@ npm run dev
 Nếu bạn có bất kỳ thắc mắc hoặc đóng góp nào cho dự án, vui lòng liên hệ:
 - **Tác giả:** Trần Minh Hiếu
 - **Github:** [TranMinhHieu20](https://github.com/TranMinhHieu20)
-- **Email:** [liên_hệ_của_bạn]@email.com
+- **Email:** tranhieu200304@gmail.com
 
 ---
 *Chúc bạn quản lý tài chính hiệu quả với Expense Tracker!*
